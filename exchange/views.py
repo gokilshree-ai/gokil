@@ -22,11 +22,10 @@ def register_view(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
-            # Create UserProfile
-            UserProfile.objects.create(
-                user=user, 
-                department=form.cleaned_data.get('department', '')
-            )
+            # Retrieve or create UserProfile (Signal might have already created it)
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            profile.department = form.cleaned_data.get('department', '')
+            profile.save()
             login(request, user)
             messages.success(request, 'Registration successful. Welcome to SkillSwap!')
             return redirect('home')
