@@ -100,8 +100,8 @@
                         </div>
                         {% if session.status == 'Pending' %}
                             <div class="mt-3 pt-3 border-top d-flex gap-2">
-                                <button class="btn btn-sm btn-success flex-grow-1"><i class="fa-solid fa-check me-1"></i> Confirm</button>
-                                <button class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-xmark me-1"></i> Decline</button>
+                                <a href="{% url 'confirm_booking' session.id %}" class="btn btn-sm btn-success flex-grow-1"><i class="fa-solid fa-check me-1"></i> Confirm</a>
+                                <a href="{% url 'decline_booking' session.id %}" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-xmark me-1"></i> Decline</a>
                             </div>
                         {% endif %}
                     </div>

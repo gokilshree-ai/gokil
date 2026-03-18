@@ -203,3 +203,31 @@ def edit_skill_view(request, skill_id):
         form = SkillForm(instance=skill)
         
     return render(request, 'edit_skill.html', {'form': form, 'skill': skill})
+@login_required
+def confirm_booking_view(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, teacher=request.user)
+    if booking.status == 'Pending':
+        booking.status = 'Confirmed'
+        booking.save()
+        messages.success(request, f'Session with {booking.student.username} confirmed!')
+    return redirect('profile')
+
+@login_required
+def decline_booking_view(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, teacher=request.user)
+    if booking.status == 'Pending':
+        booking.status = 'Cancelled'
+        booking.save()
+        
+        # Refund credits to the student
+        student_profile = booking.student.userprofile
+        student_profile.credits += 1
+        student_profile.save()
+        
+        # Take credit back from the teacher (since they didn't teach)
+        teacher_profile = booking.teacher.userprofile
+        teacher_profile.credits -= 1
+        teacher_profile.save()
+        
+        messages.info(request, f'Session with {booking.student.username} declined. Credit refunded.')
+    return redirect('profile')
