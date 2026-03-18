@@ -120,8 +120,8 @@ def book_session_view(request, skill_id):
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
-            # Check for credits (optional simple implementation)
-            profile = request.user.userprofile
+            # Check for credits (ensure profile exists)
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
             if profile.credits > 0:
                 booking = form.save(commit=False)
                 booking.student = request.user
@@ -149,7 +149,7 @@ def book_session_view(request, skill_id):
 
 @login_required
 def profile_view(request):
-    user_profile = get_object_or_404(UserProfile, user=request.user)
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
     skills_offered = Skill.objects.filter(teacher=request.user).order_by('-created_at')
     
     # Sessions booked by the student
@@ -168,7 +168,7 @@ def profile_view(request):
 
 @login_required
 def edit_profile_view(request):
-    user_profile = get_object_or_404(UserProfile, user=request.user)
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
     
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
