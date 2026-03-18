@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Login to SkillSwap{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center align-items-center min-vh-75 animate-fade-in">
+        <div class="col-md-6 col-lg-5">
+            <div class="glass-card p-5 shadow-lg border-0 text-center">
+                <div class="mb-4">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 70px; height: 70px; background: var(--primary-gradient); color: white; font-size: 2rem; box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Welcome Back</h3>
+                    <p class="text-muted small">Login to access your sessions and skills.</p>
+                </div>
+                
+                <form method="post" action="{% url 'login' %}" class="text-start">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3 form-floating">
+                        <input type="text" name="username" id="id_username" class="form-control" placeholder="Username" required>
+                        <label for="id_username"><i class="fa-solid fa-user text-muted me-2"></i>Username</label>
+                    </div>
+                    
+                    <div class="mb-4 form-floating">
+                        <input type="password" name="password" id="id_password" class="form-control" placeholder="Password" required>
+                        <label for="id_password"><i class="fa-solid fa-lock text-muted me-2"></i>Password</label>
+                    </div>
+                    
+                    <div class="d-grid mb-4">
+                        <button type="submit" class="btn btn-primary-custom py-2 px-4 shadow-sm hover-elevate fs-5">Login</button>
+                    </div>
+                </form>
+                
+                <p class="text-muted small mb-0">Don't have an account? <a href="{% url 'register' %}" class="text-primary fw-bold text-decoration-none">Sign up here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

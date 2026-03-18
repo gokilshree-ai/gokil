@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Skill: {{ skill.skill_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="glass-card p-4 p-md-5 shadow-sm">
+                <div class="d-flex align-items-center mb-4">
+                    <a href="{% url 'profile' %}" class="btn btn-sm btn-light border rounded-circle me-3 hover-elevate" style="width:40px;height:40px;padding-top:8px;"><i class="fa-solid fa-arrow-left"></i></a>
+                    <h3 class="fw-bold mb-0 text-dark">Edit Skill</h3>
+                </div>
+
+                <form method="post" action="{% url 'edit_skill' skill.id %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3 form-floating">
+                        {{ form.skill_name }}
+                        <label for="{{ form.skill_name.id_for_label }}">Skill Name</label>
+                        {% if form.skill_name.errors %}
+                            <div class="text-danger small mt-1">{{ form.skill_name.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row mb-3 mt-3">
+                        <div class="col-md-6 form-floating mb-3 mb-md-0">
+                            {{ form.category }}
+                            <label for="{{ form.category.id_for_label }}" class="px-3">Category</label>
+                        </div>
+                        <div class="col-md-6 form-floating">
+                            {{ form.level }}
+                            <label for="{{ form.level.id_for_label }}" class="px-3">Level</label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 form-floating mt-3">
+                        {{ form.description }}
+                        <label for="{{ form.description.id_for_label }}">Description</label>
+                    </div>
+                    
+                    <div class="row mb-4 mt-3">
+                        <div class="col-md-6 form-floating mb-3 mb-md-0">
+                            {{ form.availability }}
+                            <label for="{{ form.availability.id_for_label }}" class="px-3">Availability</label>
+                        </div>
+                        <div class="col-md-6 form-floating">
+                            {{ form.mode }}
+                            <label for="{{ form.mode.id_for_label }}" class="px-3">Teaching Mode</label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary-custom py-2 px-4 shadow-sm hover-elevate">Update Skill</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Add floating label adjustments to override default bootstrap if needed */
+.form-floating > .form-control,
+.form-floating > .form-select {
+    height: 3.5rem;
+    line-height: 1.25;
+}
+.form-floating > textarea.form-control {
+    height: 100px;
+}
+</style>
+{% endblock %}

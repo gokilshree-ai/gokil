@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Learn Anything. Teach Everything.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden">
+    <div class="position-absolute top-0 start-50 translate-middle-x w-100 h-100" style="background: radial-gradient(circle at top right, rgba(102, 126, 234, 0.1), transparent 40%), radial-gradient(circle at bottom left, rgba(118, 75, 162, 0.1), transparent 40%); z-index: -1;"></div>
+    
+    <div class="container animate-fade-in">
+        <h1 class="hero-title">Learn Anything.<br>Teach Everything.</h1>
+        <p class="hero-subtitle">A collaborative platform where students share knowledge, grow together, and build a peer learning ecosystem.</p>
+        
+        <div class="d-flex justify-content-center gap-3 mt-4 delay-1">
+            <a href="{% url 'marketplace' %}" class="btn btn-primary-custom btn-lg px-4"><i class="fa-solid fa-compass me-2"></i> Explore Skills</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'add_skill' %}" class="btn btn-accent btn-lg px-4"><i class="fa-solid fa-chalkboard-user me-2"></i> Start Teaching</a>
+            {% else %}
+                <a href="{% url 'register' %}" class="btn btn-accent btn-lg px-4"><i class="fa-solid fa-chalkboard-user me-2"></i> Start Teaching</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-5 bg-white bg-opacity-50">
+    <div class="container animate-fade-in delay-2">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Explore Categories</h2>
+            <div class="divider mx-auto" style="width: 50px; height: 3px; background: var(--primary-gradient); border-radius: 2px;"></div>
+        </div>
+        
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
+            {% for category in categories %}
+            <div class="col">
+                <a href="{% url 'marketplace' %}?category={{ category }}" class="text-decoration-none">
+                    <div class="glass-card text-center p-4 hover-elevate h-100 d-flex flex-column justify-content-center align-items-center">
+                        <div class="icon-wrap mb-3 p-3 rounded-circle" style="background: rgba(102, 126, 234, 0.1); color: #667eea; font-size: 1.5rem;">
+                            {% if category == 'Programming' %}<i class="fa-solid fa-code"></i>
+                            {% elif category == 'Design' %}<i class="fa-solid fa-palette"></i>
+                            {% elif category == 'Marketing' %}<i class="fa-solid fa-bullhorn"></i>
+                            {% elif category == 'Public Speaking' %}<i class="fa-solid fa-microphone-lines"></i>
+                            {% elif category == 'Video Editing' %}<i class="fa-solid fa-video"></i>
+                            {% elif category == 'Music' %}<i class="fa-solid fa-music"></i>
+                            {% elif category == 'Languages' %}<i class="fa-solid fa-language"></i>
+                            {% else %}<i class="fa-solid fa-lightbulb"></i>{% endif %}
+                        </div>
+                        <h5 class="fw-bold text-dark mb-0">{{ category }}</h5>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Trending Skills -->
+<section class="py-5">
+    <div class="container animate-fade-in delay-3">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <h2 class="fw-bold">Trending Skills</h2>
+                <div class="divider" style="width: 50px; height: 3px; background: var(--primary-gradient); border-radius: 2px;"></div>
+            </div>
+            <a href="{% url 'marketplace' %}" class="btn btn-outline-primary rounded-pill px-4 hover-elevate">View All</a>
+        </div>
+        
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for skill in trending_skills %}
+            <div class="col">
+                <div class="glass-card h-100 d-flex flex-column p-4 hover-elevate position-relative overflow-hidden">
+                    <div class="position-absolute top-0 end-0 p-3">
+                        <span class="badge badge-custom">{{ skill.level }}</span>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white text-uppercase" style="width: 48px; height: 48px; font-weight: bold; font-size: 1.2rem;">
+                            {{ skill.teacher.username|make_list|first }}
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 fw-bold">{{ skill.teacher.username }}</h6>
+                            <small class="text-muted"><i class="fa-solid fa-star text-warning"></i> 4.8 Teacher Rating</small>
+                        </div>
+                    </div>
+                    
+                    <h5 class="fw-bold mt-2 text-wrap">{{ skill.skill_name }}</h5>
+                    <p class="text-muted small flex-grow-1">{{ skill.description|truncatewords:15 }}</p>
+                    
+                    <div class="mt-auto d-flex justify-content-between align-items-center border-top pt-3">
+                        <span class="small fw-semibold text-primary"><i class="fa-solid fa-tag me-1"></i> {{ skill.category }}</span>
+                        {% if user.is_authenticated and skill.teacher == user %}
+                            <a href="{% url 'edit_skill' skill.id %}" class="btn btn-secondary btn-sm rounded-pill px-3"><i class="fa-solid fa-pen"></i> Edit</a>
+                        {% else %}
+                            <a href="{% url 'book_session' skill.id %}" class="btn btn-primary-custom btn-sm rounded-pill px-3">Book Session</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="fa-solid fa-box-open fs-1 text-muted mb-3"></i>
+                <h4 class="text-muted">No skills published yet. Be the first!</h4>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Join SkillSwap{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center animate-fade-in">
+        <div class="col-lg-10 border-0 shadow-lg form-container glass-card rounded-4 p-0 overflow-hidden">
+            <div class="row g-0">
+                <!-- Visual Side -->
+                <div class="col-md-5 text-white d-flex align-items-center justify-content-center p-5 position-relative d-none d-md-flex" style="background: var(--primary-gradient);">
+                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-white opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+                    <div class="text-center position-relative z-1">
+                        <i class="fa-solid fa-graduation-cap fs-1 mb-4"></i>
+                        <h2 class="fw-bold mb-3">Join the Community</h2>
+                        <p class="opacity-75">Connect with peers, share your expertise, and build your skillset on campus.</p>
+                        
+                        <div class="mt-5 text-start">
+                            <ul class="list-unstyled">
+                                <li class="mb-3"><i class="fa-solid fa-check-circle me-2 text-warning"></i> Learn for free</li>
+                                <li class="mb-3"><i class="fa-solid fa-check-circle me-2 text-warning"></i> Earn credits by teaching</li>
+                                <li class="mb-3"><i class="fa-solid fa-check-circle me-2 text-warning"></i> Boost your resume</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Side -->
+                <div class="col-md-7 p-4 p-md-5 bg-white bg-opacity-75">
+                    <div class="text-center mb-4 d-md-none">
+                        <h3 class="fw-bold text-dark">Join the Community</h3>
+                    </div>
+                    
+                    <h4 class="fw-bold mb-4 text-dark d-none d-md-block">Create an Account</h4>
+                    
+                    <form method="post" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6 form-floating">
+                                {{ form.first_name }}
+                                <label for="{{ form.first_name.id_for_label }}" class="px-3">First Name</label>
+                            </div>
+                            <div class="col-sm-6 form-floating">
+                                {{ form.last_name }}
+                                <label for="{{ form.last_name.id_for_label }}" class="px-3">Last Name</label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 form-floating">
+                            {{ form.email }}
+                            <label for="{{ form.email.id_for_label }}">Email Address</label>
+                        </div>
+                        
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6 form-floating">
+                                {{ form.username }}
+                                <label for="{{ form.username.id_for_label }}" class="px-3">Username</label>
+                            </div>
+                            <div class="col-sm-6 form-floating">
+                                {{ form.department }}
+                                <label for="{{ form.department.id_for_label }}" class="px-3">Department</label>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-sm-6 form-floating">
+                                {{ form.password }}
+                                <label for="{{ form.password.id_for_label }}" class="px-3">Password</label>
+                            </div>
+                            <div class="col-sm-6 form-floating">
+                                {{ form.password_confirm }}
+                                <label for="{{ form.password_confirm.id_for_label }}" class="px-3">Confirm Password</label>
+                                {% if form.password_confirm.errors %}
+                                    <div class="text-danger small mt-1">{{ form.password_confirm.errors|join:", " }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        {% if form.errors and not form.password_confirm.errors %}
+                        <div class="alert alert-danger py-2 small mb-4">
+                            Please correct the errors below.
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="d-grid mt-2">
+                            <button type="submit" class="btn btn-primary-custom py-2 shadow-sm hover-elevate fs-5">Sign Up Now</button>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted small mb-0">Already have an account? <a href="{% url 'login' %}" class="text-primary fw-bold text-decoration-none">Login here</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

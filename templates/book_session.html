@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Session: {{ skill.skill_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row animate-fade-in">
+        <div class="col-lg-8 mx-auto">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'marketplace' %}" class="text-decoration-none text-muted">Marketplace</a></li>
+                    <li class="breadcrumb-item active text-primary fw-bold" aria-current="page">Book Session</li>
+                </ol>
+            </nav>
+
+            <div class="glass-card shadow-lg border-0 overflow-hidden mb-4">
+                <div class="row g-0">
+                    <div class="col-md-4 p-4 d-flex flex-column align-items-center justify-content-center bg-white bg-opacity-50 border-end">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm mb-3" style="width: 100px; height: 100px; font-size: 2.5rem; font-weight: bold; background: var(--primary-gradient) !important;">
+                            {{ skill.teacher.username|make_list|first|upper }}
+                        </div>
+                        <h4 class="fw-bold mb-1">{{ skill.teacher.get_full_name|default:skill.teacher.username }}</h4>
+                        <span class="badge badge-custom mb-3">{{ skill.teacher.userprofile.department }}</span>
+                        
+                        <div class="text-center w-100 px-3">
+                            <p class="small text-muted mb-2"><i class="fa-solid fa-star text-warning"></i> 4.8 Rating</p>
+                            <p class="small text-muted mb-0"><i class="fa-solid fa-check-circle text-success"></i> 12 Sessions completed</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8 p-4 p-lg-5">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <span class="badge bg-light text-primary border rounded-pill px-3 py-2 mb-2">{{ skill.category }}</span>
+                                <h2 class="fw-bold text-dark mb-2">{{ skill.skill_name }}</h2>
+                            </div>
+                            <span class="badge {% if skill.level == 'Beginner' %}bg-success{% elif skill.level == 'Intermediate' %}bg-warning{% else %}bg-danger{% endif %} text-white fs-6 shadow-sm">{{ skill.level }}</span>
+                        </div>
+                        
+                        <p class="text-muted lh-lg mb-4">{{ skill.description }}</p>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border border-light d-flex align-items-center gap-3">
+                                    <div class="bg-light p-2 rounded text-primary"><i class="fa-solid fa-clock"></i></div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold fs-6">Availability</h6>
+                                        <small class="text-muted">{{ skill.availability }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border border-light d-flex align-items-center gap-3">
+                                    <div class="bg-light p-2 rounded text-danger"><i class="fa-solid fa-laptop-house"></i></div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold fs-6">Mode</h6>
+                                        <small class="text-muted">{{ skill.mode }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 opacity-25">
+                        
+                        <h5 class="fw-bold mb-3">Confirm Booking</h5>
+                        <p class="text-muted small mb-4"><i class="fa-solid fa-info-circle text-primary"></i> Booking this session will deduct 1 credit from your account.</p>
+                        
+                        <form method="post" action="{% url 'book_session' skill.id %}">
+                            {% csrf_token %}
+                            <div class="form-floating mb-4">
+                                {{ form.date }}
+                                <label for="{{ form.date.id_for_label }}">Select Date & Time</label>
+                                {% if form.date.errors %}
+                                    <div class="text-danger small mt-1">{{ form.date.errors|join:", " }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a href="{% url 'marketplace' %}" class="btn btn-light border px-4">Cancel</a>
+                                <button type="submit" class="btn btn-primary-custom px-4 hover-elevate">Confirm Booking</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

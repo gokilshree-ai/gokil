@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="container py-5 animate-fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="glass-card p-4 p-md-5 shadow-sm">
+                <div class="d-flex align-items-center mb-4">
+                    <a href="{% url 'profile' %}" class="btn btn-sm btn-light border rounded-circle me-3 hover-elevate" style="width:40px;height:40px;padding-top:8px;"><i class="fa-solid fa-arrow-left"></i></a>
+                    <h3 class="fw-bold mb-0 text-dark">Edit Profile</h3>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h5 class="fw-bold mb-3 text-primary border-bottom pb-2">Basic Info</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6 form-floating">
+                            {{ u_form.first_name }}
+                            <label for="{{ u_form.first_name.id_for_label }}" class="px-3">First Name</label>
+                        </div>
+                        <div class="col-sm-6 form-floating">
+                            {{ u_form.last_name }}
+                            <label for="{{ u_form.last_name.id_for_label }}" class="px-3">Last Name</label>
+                        </div>
+                        <div class="col-12 form-floating">
+                            {{ u_form.email }}
+                            <label for="{{ u_form.email.id_for_label }}" class="px-3">Email Address</label>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold mb-3 text-primary border-bottom pb-2">Academic Info</h5>
+                    <div class="mb-3 form-floating">
+                        {{ p_form.department }}
+                        <label for="{{ p_form.department.id_for_label }}">Department</label>
+                    </div>
+                    <div class="mb-4 form-floating">
+                        {{ p_form.bio }}
+                        <label for="{{ p_form.bio.id_for_label }}">Short Bio</label>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary-custom py-2 hover-elevate">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
